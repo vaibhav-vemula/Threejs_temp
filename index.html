@@ -1,0 +1,136 @@
+<html>
+
+    <head>
+      <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+      <meta http-equiv="Cache-Control" content="no-cache">
+      <meta name="viewport" content="initial-scale=1.0,maximum-scale=1.0,minimum-scale=1.0,user-scalable=no">
+      <title>ThreeJS Basic</title>
+      <style>
+      canvas {
+          position: fixed;
+          top: 0;
+          left: 0;
+        }
+      </style>
+    </head>
+
+    <body>
+      
+      <canvas id="bg"></canvas>
+      <script src="three/three.min.js"></script>
+      <script src="three/three.interaction.js"></script>
+      <script src="https://82mou.github.io/threejs/js/OrbitControls.js"></script>
+      
+      <script>
+
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(
+          75,
+          window.innerWidth / window.innerHeight,
+          0.1,
+          1000
+        );
+        const renderer = new THREE.WebGLRenderer({
+          canvas: document.querySelector("#bg"),
+        });
+        renderer.setPixelRatio(window.devicePixelRatio);
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        camera.position.setZ(30);
+        camera.position.setX(0);
+        camera.position.setY(15);
+        renderer.render(scene, camera);
+
+        var interaction = new THREE.Interaction(renderer, scene, camera);
+
+        // const geometry = new THREE.TorusGeometry(10, 3, 16, 100);
+        // const material = new THREE.MeshBasicMaterial({ color: 0x00eeff });
+
+        const geometry = new THREE.BoxGeometry( 8, 8, 8 , depthSegments=10);
+        const material = new THREE.MeshNormalMaterial( {color: 0x00eeff,linewidth: 4} );
+
+        const geometry2 = new THREE.BoxGeometry( 8, 8, 8 );
+        const material2 = new THREE.MeshNormalMaterial( {color: 0x00eeff,linewidth: 4} );
+
+        const geometry3 = new THREE.BoxGeometry( 8, 8, 8 );
+        const material3 = new THREE.MeshNormalMaterial( {color: 0x00eeff,linewidth: 4} );
+
+        const torus = new THREE.Mesh( geometry, material );
+        const torus2 = new THREE.Mesh( geometry2, material2 );
+        const torus3 = new THREE.Mesh( geometry3, material3 );
+        
+        torus.position.set(18, 0, 0);
+        torus2.position.set(0, 0, -15);
+        torus3.position.set(-18, 0, 0);
+
+        torus.cursor = 'pointer';
+        torus2.cursor = 'pointer';
+        torus3.cursor = 'pointer';
+
+        scene.add( torus );
+        scene.add( torus2 );
+        scene.add( torus3 );
+
+        const pointLight = new THREE.PointLight(0xffffff);
+        pointLight.position.set(10, 10, 10);
+
+        const ambientLight = new THREE.AmbientLight(0xffffff);
+        scene.add(pointLight, ambientLight);
+
+        const gridHelper = new THREE.GridHelper(200, 50);
+        scene.add(gridHelper);
+
+
+        torus.on('click', function(ev) {
+          console.log('clicked');
+          window.open("https://www.pesuventurelabs.com");
+        });
+
+        torus2.on('click', function(ev) {
+          console.log('clicked');
+          window.open("https://www.pesuventurelabs.com");
+        });
+
+        torus3.on('click', function(ev) {
+          console.log('clicked');
+          window.open("https://www.pesuventurelabs.com");
+        });
+
+        const controls = new THREE.OrbitControls(camera, renderer.domElement);
+
+        function addStar() {
+          const geometry = new THREE.SphereGeometry(0.25, 24, 24);
+          const material = new THREE.MeshStandardMaterial({ color: 0xffffff });
+          const star = new THREE.Mesh(geometry, material);
+          const [x, y, z] = Array(3)
+            .fill()
+            .map(() => Math.ceil(Math.random() * 50) * (Math.round(Math.random()) ? 1 : -1));
+          star.position.set(x, y, z);
+          scene.add(star);
+        }
+
+        Array(300).fill().forEach(addStar);
+
+        function animate() {
+          requestAnimationFrame(animate);
+          torus.rotation.x += 0.01;
+          torus.rotation.y += 0.005;
+          torus.rotation.z += 0.01;
+
+          torus2.rotation.x += 0.01;
+          torus2.rotation.y += 0.005;
+          torus2.rotation.z += 0.01;
+
+          torus3.rotation.x += 0.01;
+          torus3.rotation.y += 0.005;
+          torus3.rotation.z += 0.01;
+
+          controls.update();
+          renderer.render(scene, camera);
+        }
+        animate();
+
+      </script>
+
+    </body>
+
+    </html>
